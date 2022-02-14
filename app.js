@@ -4,6 +4,7 @@ const app = express();
 app.use(express.json());
 
 const {
+    getArticles,
     getArticle
 } = require('./controllers/articles-controllers');
 
@@ -22,6 +23,7 @@ const {
 //-------SERVER METHODS-------
 app.get('/api/topics', getTopics);
 
+app.get('/api/articles', getArticles);
 app.get('/api/articles/:article_id', getArticle);
 
 //-------ERROR HANDLERS-------
