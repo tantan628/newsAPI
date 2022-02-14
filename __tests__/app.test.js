@@ -65,3 +65,19 @@ describe('GET /api/articles/:article_id', () => {
         expect(body).toEqual({ msg: 'Bad request' })
     });
 });
+
+describe('GET /api/users', () => {
+	it('status: 200, returns all users', async () => {
+		const { body } = await request(app).get('/api/users').expect(200);
+		expect(body.users.length).toBe(4)
+		body.users.forEach((user) => {
+			expect(user).toEqual(
+				expect.objectContaining({
+					username: expect.any(String),
+					name: expect.any(String),
+					avatar_url: expect.any(String)
+					})
+			)
+		})
+	});
+});
