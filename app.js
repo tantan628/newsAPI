@@ -13,6 +13,8 @@ const {
 
 const {
     handleBadPath,
+    handleCustomErrors,
+    handlePsqlErrors,
     handleServerError
 } = require('./controllers/errors-controller');
 
@@ -24,6 +26,10 @@ app.get('/api/articles/:article_id', getArticle);
 
 //-------ERROR HANDLERS-------
 app.all('/*', handleBadPath)
+
+app.use(handleCustomErrors);
+
+app.use(handlePsqlErrors)
 
 app.use(handleServerError);
 

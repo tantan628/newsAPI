@@ -54,7 +54,14 @@ describe('GET /api/articles/:article_id', () => {
             })
         )
     });
-    it('status: 404, id not found', () => {
-        
+    it('status: 404, id not found', async () => {
+        const response = await request(app).get('/api/articles/100').expect(404)
+        const { body } = response;
+        expect(body).toEqual({ msg: 'No articles found' })
+    });
+    it('status: 400, invalid id returns bad request', async () => {
+        const response = await request(app).get('/api/articles/not-a-number').expect(400)
+        const { body } = response;
+        expect(body).toEqual({ msg: 'Bad request' })
     });
 });
