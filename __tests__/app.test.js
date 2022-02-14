@@ -62,6 +62,63 @@ describe('GET /api/articles/:article_id', () => {
     it('status: 400, invalid id returns bad request', async () => {
         const response = await request(app).get('/api/articles/not-a-number').expect(400)
         const { body } = response;
-        expect(body).toEqual({ msg: 'Bad request' })
+        expect(body).toEqual({ msg: 'Bad request: Incorrect data type input' })
+    });
+});
+
+describe('PATCH /api/articles/:article_id', () => {
+    it('status: 200, responds with updated article', async () => {
+        const testVotes = {
+            inc_votes: 50
+        };
+        const response = await request(app)
+                        .patch('/api/articles/1')
+                        .send(testVotes)
+                        .expect(200)
+        const { body } = response;
+        expect(body.article[0]).toEqual(
+            expect.objectContaining({
+                author: "butter_bridge",
+                title: "Living in the shadow of a great man",
+                article_id: 1,
+                body: "I find this existence challenging",
+                topic: "mitch",
+                created_at: new Date(1594329060000).toJSON(),
+                votes: 150
+            })
+        )
+    });
+    it('status: 404, id not found', async () => {
+        const testVotes = {
+            inc_votes: 50
+        };
+        const response = await request(app)
+                        .patch('/api/articles/100')
+                        .send(testVotes)
+                        .expect(404)
+        const { body } = response;
+        expect(body).toEqual({ msg: 'No articles found' })
+    });
+    it('status: 400, invalid id given', async () => {
+        const testVotes = {
+            inc_votes: 50
+        };
+        const response = await request(app)
+                        .patch('/api/articles/not-a-number')
+                        .send(testVotes)
+                        .expect(400)
+        const { body } = response;
+        expect(body).toEqual({ msg: 'Bad request: Incorrect data type input' })
+    });
+    it('status: 400, invalid vote increment given', async () => {
+        const testVotes = {
+            inc_votes: 'not-a-number'
+        };
+        const response = await request(app)
+                        .patch('/api/articles/1')
+                        .send(testVotes)
+                        .expect(400)
+        const { body } = response;
+        expect(body).toEqual({ msg: 'Bad request: Incorrect data type input' })
     });
 });
