@@ -34,7 +34,7 @@ const createTables = async () => {
     article_id INT REFERENCES articles(article_id) NOT NULL,
     author VARCHAR REFERENCES users(username) NOT NULL,
     votes INT DEFAULT 0 NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
   );`);
 };
 

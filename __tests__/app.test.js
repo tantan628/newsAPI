@@ -54,4 +54,7 @@ describe('GET /api/articles/:article_id', () => {
             })
         )
     });
+    it('status: 404, id not found', () => {
+        
+    });
 });
