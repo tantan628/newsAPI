@@ -23,7 +23,7 @@ const createTables = async () => {
     topic VARCHAR NOT NULL REFERENCES topics(slug),
     author VARCHAR NOT NULL REFERENCES users(username),
     body VARCHAR NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     votes INT DEFAULT 0 NOT NULL
   );`);
 
