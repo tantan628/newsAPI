@@ -81,6 +81,11 @@ describe('GET /api/articles', () => {
                     body: expect.any(String),
                     created_at: expect.any(String),
                     votes: expect.any(Number)
+                })
+            )
+        })
+    })
+});
 
 describe('PATCH /api/articles/:article_id', () => {
     it('status: 200, responds with updated article', async () => {

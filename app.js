@@ -4,14 +4,18 @@ const app = express();
 app.use(express.json());
 
 const {
+    getTopics
+} = require('./controllers/topics-controllers');
+
+const {
     getArticles,
     getArticle,
     updateVotes
 } = require('./controllers/articles-controllers');
 
 const {
-    getTopics
-} = require('./controllers/topics-controllers');
+    getUsers
+} = require('./controllers/users-controllers');
 
 const {
     handleBadPath,
@@ -19,10 +23,6 @@ const {
     handlePsqlErrors,
     handleServerError
 } = require('./controllers/errors-controller');
-
-const {
-    getUsers
-} = require('./controllers/users-controllers');
 
 
 //-------SERVER METHODS-------
@@ -46,5 +46,4 @@ app.use(handlePsqlErrors)
 app.use(handleServerError);
 
 //----------EXPORTS----------
-
 module.exports = app;
