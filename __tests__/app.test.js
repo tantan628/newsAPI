@@ -42,7 +42,7 @@ describe('GET /api/articles/:article_id', () => {
     it('status: 200, responds with requested article', async () => {
         const response = await request(app).get('/api/articles/1').expect(200)
         const { body } = response;
-        expect(body.article[0]).toEqual(
+        expect(body.article).toEqual(
             expect.objectContaining({
                 author: "butter_bridge",
                 title: "Living in the shadow of a great man",
@@ -57,7 +57,7 @@ describe('GET /api/articles/:article_id', () => {
     it('status: 200, responds with comment_count on object', async () => {
         const response = await request(app).get('/api/articles/1').expect(200)
         const { body } = response;
-        expect(body.article[0]).toEqual(
+        expect(body.article).toEqual(
             expect.objectContaining({
                 comment_count: 11
             })
@@ -106,7 +106,7 @@ describe('PATCH /api/articles/:article_id', () => {
                         .send(testVotes)
                         .expect(200)
         const { body } = response;
-        expect(body.article[0]).toEqual(
+        expect(body.article).toEqual(
             expect.objectContaining({
                 author: "butter_bridge",
                 title: "Living in the shadow of a great man",

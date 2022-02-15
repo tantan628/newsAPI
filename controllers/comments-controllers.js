@@ -13,7 +13,7 @@ exports.getCommentsByArticleId = async (req, res, next) => {
     try {
         const checkArticleIdPromise = checkArticleId(articleId);
         const fetchCommentsByIdPromise = fetchCommentsByArticleId(articleId);
-        const [ { rows: [article] }, { rows: comments }] = await Promise.all([checkArticleIdPromise, fetchCommentsByIdPromise]);
+        const [ { rows: [article] }, { rows: comments } ] = await Promise.all([checkArticleIdPromise, fetchCommentsByIdPromise]);
         if(!article) {
             await Promise.reject({ status: 404, msg: "Article ID not found"})
         }

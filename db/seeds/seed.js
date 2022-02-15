@@ -70,12 +70,9 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
 
   await db.query(insertCommentsQueryStr).then((result) => result.rows);
 
-  await db.query(`
-  UPDATE articles
-  SET comment_count = (
-    SELECT COUNT (*)
-    FROM comments
-    WHERE comments.article_id = articles.article_id)`)
+  const insertCommentCountsQueryStr = "UPDATE articles SET comment_count = (SELECT COUNT (*) FROM comments WHERE comments.article_id = articles.article_id);"
+
+  await db.query(insertCommentCountsQueryStr);
     
 };
 

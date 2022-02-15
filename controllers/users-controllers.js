@@ -6,8 +6,8 @@ const {
 //------CONTROLLERS------
 exports.getUsers = async (req, res, next) => {
 	try {
-		const { rows } = await fetchUsers();
-		res.status(200).send({ users: rows });
+		const { rows: users } = await fetchUsers();
+		res.status(200).send({ users });
 	} catch(err) {
 		next(err)
 	}
