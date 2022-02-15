@@ -13,7 +13,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
 exports.handlePsqlErrors = (err, req, res, next) => {
     switch(err.code) {
         case '22P02':
-            res.status(400).send({ msg: "Bad request" })
+            res.status(400).send({ msg: "Bad request: Incorrect data type input" })
             break;
     }
     next(err);
