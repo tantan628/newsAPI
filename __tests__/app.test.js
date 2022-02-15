@@ -169,3 +169,35 @@ describe('GET /api/users', () => {
 		})
 	});
 });
+
+describe('GET /api/articles/:article_id/comments', () => {
+    it('status: 200, responds with relevant comments', async () => {
+        const { body } = await request(app).get('/api/articles/1/comments').expect(200);
+		expect(body.comments.length).toBe(11)
+		body.comments.forEach((comment) => {
+			expect(comment).toEqual(
+				expect.objectContaining({
+                    comment_id: expect.any(Number),
+                    votes: expect.any(Number),
+                    created_at: expect.any(String),
+                    author: expect.any(String),
+                    body: expect.any(String)
+                })
+            )
+        })
+    });
+    it('status: 400, invalid id returns bad request', async () => {
+        const response = await request(app).get('/api/articles/not-a-number/comments').expect(400)
+        const { body } = response;
+        expect(body).toEqual({ msg: 'Bad request: Incorrect data type input' })
+    });
+    it('status: 200, responds with empty array if given article id with no comments', async () => {
+        const { body } = await request(app).get('/api/articles/2/comments').expect(200);
+		expect(body.comments.length).toBe(0)
+    });
+    it('status: 404, article_id does not exist', async () => {
+        const response = await request(app).get('/api/articles/200/comments').expect(404)
+        const { body } = response;
+        expect(body).toEqual({ msg: 'Article ID not found' })
+    })
+});

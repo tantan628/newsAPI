@@ -2,7 +2,7 @@
 const db = require('../db/connection')
 
 //------MODELS------
-exports.fetchCommentsByArticle = (articleId) => {
+exports.fetchCommentsByArticleId = (articleId) => {
     //CREATE QUERY STRING
     const queryStr = `
     SELECT *
