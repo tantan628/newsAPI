@@ -11,11 +11,12 @@ const {
 exports.getCommentsByArticleId = async (req, res, next) => {
     const articleId = req.params.article_id;
     try {
-        const { rows: article } = await checkArticleId(articleId);
-        if(article.length === 0) {
-            throw({ status: 404, msg: "Article ID not found"})
+        const checkArticleIdPromise = checkArticleId(articleId);
+        const fetchCommentsByIdPromise = fetchCommentsByArticleId(articleId);
+        const [ { rows: [article] }, { rows: comments }] = await Promise.all([checkArticleIdPromise, fetchCommentsByIdPromise]);
+        if(!article) {
+            await Promise.reject({ status: 404, msg: "Article ID not found"})
         }
-        const { rows: comments } = await fetchCommentsByArticleId(articleId);
         res.status(200).send({ comments });
     } catch(err) {
         next(err)
