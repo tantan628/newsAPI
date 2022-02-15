@@ -24,7 +24,8 @@ const createTables = async () => {
     author VARCHAR NOT NULL REFERENCES users(username),
     body VARCHAR NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    votes INT DEFAULT 0 NOT NULL
+    votes INT DEFAULT 0 NOT NULL,
+    comment_count INT DEFAULT 0 NOT NULL
   );`);
 
   await db.query(`
