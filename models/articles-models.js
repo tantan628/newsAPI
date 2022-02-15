@@ -24,7 +24,6 @@ exports.fetchArticle = (articleId) => {
 };
 
 exports.changeVotes = (articleId, votesInc) => {
-    console.log(articleId, votesInc)
     //CREATE QUERY STRING
     const queryStr = `
     UPDATE articles
