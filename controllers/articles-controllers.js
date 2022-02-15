@@ -1,10 +1,20 @@
 //-------IMPORTS-------
 const {
+    fetchArticles,
     fetchArticle,
     changeVotes
 } = require('../models/articles-models')
 
 //------CONTROLLERS------
+exports.getArticles = async (req, res, next) => {
+	try {
+		const { rows } = await fetchArticles();
+		res.status(200).send({ articles: rows });
+	} catch(err) {
+		next(err)
+	}
+};
+
 exports.getArticle = async (req, res, next) => {
     const articleId = req.params.article_id;
     try{

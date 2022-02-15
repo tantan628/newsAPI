@@ -4,13 +4,14 @@ const app = express();
 app.use(express.json());
 
 const {
-    getTopics
-} = require('./controllers/topics-controllers');
-
-const {
+    getArticles,
     getArticle,
     updateVotes
 } = require('./controllers/articles-controllers');
+
+const {
+    getTopics
+} = require('./controllers/topics-controllers');
 
 const {
     handleBadPath,
@@ -27,6 +28,7 @@ const {
 //-------SERVER METHODS-------
 app.get('/api/topics', getTopics);
 
+app.get('/api/articles', getArticles);
 app.get('/api/articles/:article_id', getArticle);
 
 app.patch('/api/articles/:article_id', updateVotes);

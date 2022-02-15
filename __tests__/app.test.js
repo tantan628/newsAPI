@@ -66,6 +66,22 @@ describe('GET /api/articles/:article_id', () => {
     });
 });
 
+
+describe('GET /api/articles', () => {
+	it('status: 200, returns all articles', async () => {
+		const { body } = await request(app).get('/api/articles').expect(200);
+		expect(body.articles.length).toBe(12)
+		body.articles.forEach((article) => {
+			expect(article).toEqual(
+				expect.objectContaining({
+                    article_id: expect.any(Number),
+					title: expect.any(String),
+					topic: expect.any(String),
+					author: expect.any(String),
+                    body: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number)
+
 describe('PATCH /api/articles/:article_id', () => {
     it('status: 200, responds with updated article', async () => {
         const testVotes = {
@@ -133,6 +149,7 @@ describe('GET /api/users', () => {
 					username: expect.any(String),
 					name: expect.any(String),
 					avatar_url: expect.any(String)
+
 					})
 			)
 		})
