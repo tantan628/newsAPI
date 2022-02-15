@@ -54,6 +54,15 @@ describe('GET /api/articles/:article_id', () => {
             })
         )
     });
+    it('status: 200, responds with comment_count on object', async () => {
+        const response = await request(app).get('/api/articles/1').expect(200)
+        const { body } = response;
+        expect(body.article[0]).toEqual(
+            expect.objectContaining({
+                comment_count: 11
+            })
+        )
+    });
     it('status: 404, id not found', async () => {
         const response = await request(app).get('/api/articles/100').expect(404)
         const { body } = response;

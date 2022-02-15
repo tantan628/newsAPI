@@ -12,7 +12,7 @@ exports.fetchArticles = () => {
 	return db.query(queryStr);
 };
 
-exports.fetchArticle = (articleId) => {
+exports.fetchArticleById = (articleId) => {
     //CREATE QUERY STRING
     const queryStr = `
     SELECT *
