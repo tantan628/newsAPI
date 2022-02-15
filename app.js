@@ -24,6 +24,10 @@ const {
     handleServerError
 } = require('./controllers/errors-controller');
 
+const {
+    getCommentsByArticleId
+} = require('./controllers/comments-controllers');
+
 
 //-------SERVER METHODS-------
 app.get('/api/topics', getTopics);
@@ -34,6 +38,8 @@ app.get('/api/articles/:article_id', getArticleById);
 app.patch('/api/articles/:article_id', updateVotes);
 
 app.get('/api/users', getUsers);
+
+app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
 
 
 //-------ERROR HANDLERS-------

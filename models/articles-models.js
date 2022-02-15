@@ -34,3 +34,14 @@ exports.changeVotes = (articleId, votesInc) => {
     //RETURN QUERY
     return db.query(queryStr, [votesInc, articleId])
 };
+
+exports.checkArticleId = (articleId) => {
+    //CREATE QUERY STRING
+    const queryStr = `
+    SELECT *
+    FROM articles
+    WHERE article_id = $1`
+
+    //RETURN QUERY
+    return db.query(queryStr, [articleId])
+};
