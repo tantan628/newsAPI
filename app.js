@@ -9,7 +9,7 @@ const {
 
 const {
     getArticles,
-    getArticle,
+    getArticleById,
     updateVotes
 } = require('./controllers/articles-controllers');
 
@@ -29,7 +29,7 @@ const {
 app.get('/api/topics', getTopics);
 
 app.get('/api/articles', getArticles);
-app.get('/api/articles/:article_id', getArticle);
+app.get('/api/articles/:article_id', getArticleById);
 
 app.patch('/api/articles/:article_id', updateVotes);
 

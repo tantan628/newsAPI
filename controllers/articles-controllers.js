@@ -1,7 +1,7 @@
 //-------IMPORTS-------
 const {
     fetchArticles,
-    fetchArticle,
+    fetchArticleById,
     changeVotes
 } = require('../models/articles-models')
 
@@ -15,10 +15,10 @@ exports.getArticles = async (req, res, next) => {
 	}
 };
 
-exports.getArticle = async (req, res, next) => {
+exports.getArticleById = async (req, res, next) => {
     const articleId = req.params.article_id;
     try{
-        const { rows } = await fetchArticle(articleId);
+        const { rows } = await fetchArticleById(articleId);
         if(rows.length === 0) {
             throw ({ status: 404, msg: "No articles found" })
         }
