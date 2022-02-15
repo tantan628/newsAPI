@@ -19,6 +19,10 @@ const {
     handleServerError
 } = require('./controllers/errors-controller');
 
+const {
+    getUsers
+} = require('./controllers/users-controllers');
+
 
 //-------SERVER METHODS-------
 app.get('/api/topics', getTopics);
@@ -26,6 +30,9 @@ app.get('/api/topics', getTopics);
 app.get('/api/articles/:article_id', getArticle);
 
 app.patch('/api/articles/:article_id', updateVotes);
+
+app.get('/api/users', getUsers);
+
 
 //-------ERROR HANDLERS-------
 app.all('/*', handleBadPath)
