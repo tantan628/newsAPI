@@ -26,8 +26,6 @@ exports.getArticleById = async (req, res, next) => {
         if(article.length === 0) {
             throw ({ status: 404, msg: "No articles found" })
         }
-        const { rows: comments } = await fetchCommentsByArticle(articleId);
-        article[0].comment_count = comments.length;
         res.status(200).send({ article });
     } catch(err) {
         next(err);
