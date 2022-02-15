@@ -93,7 +93,18 @@ describe('GET /api/articles', () => {
                 })
             )
         })
-    })
+    });
+    it('status: 200, also includes comment_count', async () => {
+        const { body } = await request(app).get('/api/articles').expect(200);
+		expect(body.articles.length).toBe(12)
+		body.articles.forEach((article) => {
+			expect(article).toEqual(
+				expect.objectContaining({
+                    comment_count: expect.any(Number)
+                })
+            )
+        })
+    });
 });
 
 describe('PATCH /api/articles/:article_id', () => {
