@@ -3,7 +3,11 @@ const {
     fetchArticles,
     fetchArticleById,
     changeVotes
-} = require('../models/articles-models')
+} = require('../models/articles-models');
+
+const {
+    fetchCommentsByArticle
+} = require('../models/comments-models');
 
 //------CONTROLLERS------
 exports.getArticles = async (req, res, next) => {
@@ -18,11 +22,13 @@ exports.getArticles = async (req, res, next) => {
 exports.getArticleById = async (req, res, next) => {
     const articleId = req.params.article_id;
     try{
-        const { rows } = await fetchArticleById(articleId);
-        if(rows.length === 0) {
+        const { rows: article } = await fetchArticleById(articleId);
+        if(article.length === 0) {
             throw ({ status: 404, msg: "No articles found" })
         }
-        res.status(200).send({ article: rows });
+        const { rows: comments } = await fetchCommentsByArticle(articleId);
+        article[0].comment_count = comments.length;
+        res.status(200).send({ article });
     } catch(err) {
         next(err);
     }
