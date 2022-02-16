@@ -1,12 +1,14 @@
 //-------IMPORTS-------
 const {
     fetchCommentsByArticleId,
-    createCommentByArticleId
+    createCommentByArticleId,
+    removeComment
 }  = require('../models/comments-models');
 
 const {
     checkArticleId,
-    incrementCommentCount
+    incrementCommentCount,
+    decrementCommentCount
 } = require('../models/articles-models');
 
 //-----CONTROLLERS-----
@@ -37,3 +39,18 @@ exports.postCommentByArticleId = async (req, res, next) => {
         next(err)
     }
 };
+
+exports.deleteComment = async (req, res, next) => {
+    const commentId = req.params.comment_id;
+    try {
+        const { rows } = await removeComment(commentId);
+        if(rows.length === 0) {
+            await Promise.reject({ status: 404, msg: "Not Found: Comment not found" });
+        }
+        const articleId = rows[0].article_id;
+        await decrementCommentCount(articleId);
+        res.status(204).send()
+    } catch(err) {
+        next(err)
+    }
+}

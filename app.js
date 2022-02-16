@@ -26,7 +26,8 @@ const {
 
 const {
     getCommentsByArticleId,
-    postCommentByArticleId
+    postCommentByArticleId,
+    deleteComment
 } = require('./controllers/comments-controllers');
 
 
@@ -42,6 +43,8 @@ app.patch('/api/articles/:article_id', updateVotes);
 
 app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
 app.post('/api/articles/:article_id/comments', postCommentByArticleId);
+
+app.delete('/api/comments/:comment_id', deleteComment);
 
 //-------ERROR HANDLERS-------
 app.all('/*', handleBadPath)

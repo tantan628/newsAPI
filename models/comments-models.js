@@ -23,3 +23,15 @@ exports.createCommentByArticleId = (articleId, newComment) => {
     //RETURN QUERY
     return db.query(queryStr, [newComment.body, newComment.username, articleId])
 };
+
+exports.removeComment = (commentId) => {
+    //CREATE QUERY STRING
+    const queryStr = `
+    DELETE
+    FROM comments
+    WHERE comment_id = $1
+    RETURNING *`
+
+    //RETURN QUERY
+    return db.query(queryStr, [commentId]);
+}
