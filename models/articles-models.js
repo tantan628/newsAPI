@@ -45,3 +45,14 @@ exports.checkArticleId = (articleId) => {
     //RETURN QUERY
     return db.query(queryStr, [articleId])
 };
+
+exports.incrementCommentCount = (articleId) => {
+    //CREATE QUERY STRING
+    const queryStr = `
+    UPDATE articles
+    SET comment_count = comment_count + 1
+    WHERE article_id = $1`
+
+    //RETURN QUERY
+    return db.query(queryStr, [articleId]);
+};
