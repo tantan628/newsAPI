@@ -7,8 +7,14 @@ const {
 
 //------CONTROLLERS------
 exports.getArticles = async (req, res, next) => {
-	try {
-		const { rows: articles } = await fetchArticles();
+	const sort_by = req.query.sort_by;
+    const order = req.query.order;
+    const topic = req.query.topic;
+    try {
+		const { rows: articles } = await fetchArticles(sort_by, order, topic);
+        if(articles.length === 0) {
+            await Promise.reject({ status: 404, msg: 'Not Found: Topic not found'})
+        }
 		res.status(200).send({ articles });
 	} catch(err) {
 		next(err)

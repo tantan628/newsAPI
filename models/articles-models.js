@@ -2,14 +2,33 @@
 const db = require('../db/connection')
 
 //------MODELS------
-exports.fetchArticles = () => {
-	//CREATE QUERY STRING
-	const queryStr = `
-			SELECT *
-			FROM articles;`
+
+exports.fetchArticles = (sort_by = 'created_at', order = 'asc', topic) => {
+	//SORT_BY VALIDATION
+    const validSortBys = ['title', 'topic', 'author', 'body', 'created_at', 'votes', 'comment_count'];
+    if(!validSortBys.includes(sort_by)) {
+        return Promise.reject({ status: 400, msg: "Bad Request: Invalid sort_by query" });
+    }
+    
+    //ORDER VALIDATION
+    const validOrders = ['ASC', 'DESC'];
+    if(!validOrders.includes(order.toUpperCase())) {
+        return Promise.reject({ status: 400, msg: "Bad Request: Invalid order query"});
+    }
+
+    //CREATE QUERY STRING
+	let queryStr = "SELECT * FROM articles ";
+
+    if(topic) {
+        queryStr += "WHERE topic = $1 ";
+    };
+
+    queryStr += `ORDER BY ${sort_by} ${order};`;
 
 	//RETURN QUERY
-	return db.query(queryStr);
+	if(topic) return db.query(queryStr, [topic]);
+    
+    return db.query(queryStr);
 };
 
 exports.fetchArticleById = (articleId) => {

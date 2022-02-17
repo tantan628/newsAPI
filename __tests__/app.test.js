@@ -115,6 +115,47 @@ describe('GET /api/articles', () => {
             )
         })
     });
+    it('status: 200, orders by date asc by default', async () => {
+        const { body } = await request(app).get('/api/articles').expect(200);
+        expect(body.articles).toBeSortedBy('created_at');
+    });
+    it('status: 200, accepts sort_by query', async () => {
+        const { body } = await request(app).get('/api/articles?sort_by=title').expect(200);
+        expect(body.articles).toBeSortedBy('title');
+    });
+    it('status: 200, accepts order query', async () => {
+        const { body } = await request(app).get('/api/articles?order=desc').expect(200);
+        expect(body.articles).toBeSortedBy('created_at', { descending: true });
+    });
+    it('status: 200, accept topic query', async () => {
+        const { body } = await request(app).get('/api/articles?topic=cats').expect(200);
+        expect(body.articles.length).toBe(1);
+        body.articles.forEach((article) => {
+            expect(article).toEqual(
+                expect.objectContaining({
+                    title: expect.any(String),
+                    topic: 'cats',
+                    author: expect.any(String),
+                    body: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    comment_count: expect.any(Number)
+                })
+            )
+        })
+    });
+    it('status: 400, returns error for invalid sort_by query', async () => {
+        const { body } = await request(app).get('/api/articles?sort_by=invalid-input').expect(400);
+        expect(body).toEqual({ msg: "Bad Request: Invalid sort_by query"})
+    });
+    it('status: 400, returns error for invalid order query', async () => {
+        const { body } = await request(app).get('/api/articles?order=invalid-input').expect(400);
+        expect(body).toEqual({ msg: "Bad Request: Invalid order query"})
+    });
+    it('status: 404, topic not found', async () => {
+        const { body } = await request(app).get('/api/articles?topic=nonexistent-topic').expect(404);
+        expect(body).toEqual({ msg: "Not Found: Topic not found"})
+    });
 });
 
 describe('PATCH /api/articles/:article_id', () => {
