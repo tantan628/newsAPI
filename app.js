@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
+const apiRouter = require('./routes/api-router');
 
 const {
     handleBadPath,
@@ -9,8 +10,6 @@ const {
     handlePsqlErrors,
     handleServerError
 } = require('./controllers/errors-controller');
-
-const apiRouter = require('./routes/api-router');
 
 
 //-------ROUTER-------
