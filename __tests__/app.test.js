@@ -70,10 +70,10 @@ describe('GET /api/articles/:article_id', () => {
         const { body } = response;
         expect(body).toEqual({ msg: 'No articles found' })
     });
-    it('status: 400, invalid id returns bad request', async () => {
+    it('status: 400, invalid id given', async () => {
         const response = await request(app).get('/api/articles/not-a-number').expect(400)
         const { body } = response;
-        expect(body).toEqual({ msg: 'Bad request: Incorrect data type input' })
+        expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' })
     });
 });
 
@@ -157,7 +157,7 @@ describe('PATCH /api/articles/:article_id', () => {
                         .send(testVotes)
                         .expect(400)
         const { body } = response;
-        expect(body).toEqual({ msg: 'Bad request: Incorrect data type input' })
+        expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' })
     });
     it('status: 400, invalid vote increment given', async () => {
         //ARRANGE
@@ -170,7 +170,7 @@ describe('PATCH /api/articles/:article_id', () => {
                         .send(testVotes)
                         .expect(400)
         const { body } = response;
-        expect(body).toEqual({ msg: 'Bad request: Incorrect data type input' })
+        expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' })
     });
 });
 
@@ -207,10 +207,10 @@ describe('GET /api/articles/:article_id/comments', () => {
             )
         })
     });
-    it('status: 400, invalid id returns bad request', async () => {
+    it('status: 400, invalid id', async () => {
         const response = await request(app).get('/api/articles/not-a-number/comments').expect(400)
         const { body } = response;
-        expect(body).toEqual({ msg: 'Bad request: Incorrect data type input' })
+        expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' })
     });
     it('status: 200, responds with empty array if given article id with no comments', async () => {
         const { body } = await request(app).get('/api/articles/2/comments').expect(200);
@@ -306,7 +306,7 @@ describe('POST /api/articles/:article_id/comments', () => {
         const { body } = response;
         expect(body).toEqual({ msg: 'Not Found: Required data constraint given not found' });
     });
-    it('status: 400, invalid id returns bad request', async () => {
+    it('status: 400, invalid id', async () => {
         //ARRANGE
         const testComment = {
             username: "butter_bridge",
@@ -315,6 +315,22 @@ describe('POST /api/articles/:article_id/comments', () => {
         //ASSERT
         const response = await request(app).post('/api/articles/not-a-number/comments').send(testComment).expect(400)
         const { body } = response;
-        expect(body).toEqual({ msg: 'Bad request: Incorrect data type input' })
+        expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' })
+    });
+});
+
+describe('DELETE /api/comments/:comment_id', () => {
+    it('status: 204, decrements linked comment_count', async () => {
+        await request(app).delete('/api/comments/1').expect(204);
+        const { body } = await request(app).get('/api/articles/9');
+        expect(body.article.comment_count).toBe(1);
+    });
+    it('status: 404, comment not found', async () => {
+        const { body } = await request(app).delete('/api/comments/1000').expect(404);
+        expect(body).toEqual({ msg: "Not Found: Comment not found" });
+    });
+    it('status: 400, invalid comment id', async () => {
+        const { body } = await request(app).delete('/api/comments/not-a-number').expect(400);
+        expect(body).toEqual({ msg: "Bad Request: Incorrect data type input" });
     });
 });
