@@ -115,17 +115,17 @@ describe('GET /api/articles', () => {
             )
         })
     });
-    it('status: 200, orders by date asc by default', async () => {
+    it('status: 200, orders by date desc by default', async () => {
         const { body } = await request(app).get('/api/articles').expect(200);
-        expect(body.articles).toBeSortedBy('created_at');
+        expect(body.articles).toBeSortedBy('created_at', { descending: true });
     });
     it('status: 200, accepts sort_by query', async () => {
         const { body } = await request(app).get('/api/articles?sort_by=title').expect(200);
-        expect(body.articles).toBeSortedBy('title');
+        expect(body.articles).toBeSortedBy('title', { descending: true });
     });
     it('status: 200, accepts order query', async () => {
-        const { body } = await request(app).get('/api/articles?order=desc').expect(200);
-        expect(body.articles).toBeSortedBy('created_at', { descending: true });
+        const { body } = await request(app).get('/api/articles?order=asc').expect(200);
+        expect(body.articles).toBeSortedBy('created_at');
     });
     it('status: 200, accept topic query', async () => {
         const { body } = await request(app).get('/api/articles?topic=cats').expect(200);

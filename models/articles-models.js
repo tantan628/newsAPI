@@ -3,7 +3,7 @@ const db = require('../db/connection')
 
 //------MODELS------
 
-exports.fetchArticles = (sort_by = 'created_at', order = 'asc', topic) => {
+exports.fetchArticles = (sort_by = 'created_at', order = 'desc', topic) => {
 	//SORT_BY VALIDATION
     const validSortBys = ['title', 'topic', 'author', 'body', 'created_at', 'votes', 'comment_count'];
     if(!validSortBys.includes(sort_by)) {
