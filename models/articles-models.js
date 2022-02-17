@@ -17,7 +17,7 @@ exports.fetchArticles = (sort_by = 'created_at', order = 'desc', topic) => {
     }
 
     //CREATE QUERY STRING
-	let queryStr = "SELECT * FROM articles ";
+	let queryStr = "SELECT author, title, article_id, topic, created_at, votes, comment_count FROM articles ";
 
     if(topic) {
         queryStr += "WHERE topic = $1 ";
