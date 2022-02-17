@@ -4,6 +4,10 @@ const app = express();
 app.use(express.json());
 
 const {
+    getEndpoints
+} = require('./db/helpers/utils');
+
+const {
     getTopics
 } = require('./controllers/topics-controllers');
 
@@ -32,6 +36,8 @@ const {
 
 
 //-------SERVER METHODS-------
+app.get('/api', getEndpoints);
+
 app.get('/api/topics', getTopics);
 
 app.get('/api/users', getUsers);

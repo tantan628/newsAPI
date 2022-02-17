@@ -1,3 +1,5 @@
+const endpointsObj = require('../../endpoints.json');
+
 exports.convertTimestampToDate = ({ created_at, ...otherProperties }) => {
   if (!created_at) return { ...otherProperties };
   return { created_at: new Date(created_at), ...otherProperties };
@@ -21,3 +23,10 @@ exports.formatComments = (comments, idLookup) => {
   });
 };
 
+exports.getEndpoints = (req, res, next) => {
+  try {
+    res.status(200).send({ endpoints: endpointsObj })
+  } catch(err) {
+    next(err)
+  }
+};

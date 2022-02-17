@@ -93,8 +93,8 @@
       }
     }
   },
-  "POST /api/article/:article_id/comments": {
-    "description": "posts a new comment to the specified article",
+  "POST /api/articles/:article_id/comments": {
+    "description": "posts a new comment to the specified article and increments comment count for the article",
     "queries": [],
     "exampleResponse": {
       "comment":
@@ -107,5 +107,10 @@
           "created_at": "<current date and time>"
         }
     }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes specified comment and decrements comment count for relevant article",
+    "queries": [],
+    "exampleResponse": {}
   }
 }

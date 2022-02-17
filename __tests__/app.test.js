@@ -4,6 +4,7 @@ const testData = require('../db/data/test-data');
 const app = require('../app');
 const request = require('supertest');
 const connection = require('../db/connection');
+const endpointsObj = require('../endpoints.json');
 
 //---SEEDING & CONNECTIONS---
 beforeEach(() => seed(testData));
@@ -18,6 +19,13 @@ describe('Invalid Path', () => {
             .then(({ body }) => {
                 expect(body).toEqual({ msg: "Path not found" })
             })
+    });
+});
+
+describe('GET /api', () => {
+    it('status: 200, responds with description of all endpoints', async () => {
+        const { body } = await request(app).get('/api').expect(200);
+        expect(body.endpoints).toEqual(endpointsObj)
     });
 });
 
