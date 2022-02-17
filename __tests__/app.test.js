@@ -79,7 +79,7 @@ describe('GET /api/articles/:article_id', () => {
 
 
 describe('GET /api/articles', () => {
-	it('status: 200, returns all articles', async () => {
+	it.only('status: 200, returns all articles', async () => {
 		const { body } = await request(app).get('/api/articles').expect(200);
 		expect(body.articles.length).toBe(12)
 		body.articles.forEach((article) => {
