@@ -9,7 +9,6 @@ const {
 exports.getArticles = async (req, res, next) => {
 	try {
 		const { rows: articles } = await fetchArticles();
-        console.log(articles)
 		res.status(200).send({ articles });
 	} catch(err) {
 		next(err)
