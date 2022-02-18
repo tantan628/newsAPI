@@ -91,7 +91,7 @@
     "description": "increments votes on specified article by amount given in body",
     "queries": [],
     "examplePatchBody": {
-      "votes": "<number to increment votes by (negative number to decrement)>"
+      "inc_votes": "<number to increment votes by (negative number to decrement)>"
     },
     "exampleResponse": {
       "article": {

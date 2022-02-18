@@ -2,7 +2,8 @@
 const {
     fetchCommentsByArticleId,
     createCommentByArticleId,
-    removeComment
+    removeComment,
+    changeCommentVotes
 }  = require('../models/comments-models');
 
 const {
@@ -53,4 +54,18 @@ exports.deleteComment = async (req, res, next) => {
     } catch(err) {
         next(err)
     }
-}
+};
+
+exports.incCommentVotes = async (req, res, next) => {
+    const commentId = req.params.comment_id;
+    const votesInc = req.body.inc_votes;
+    try {
+        const { rows: [comment] } = await changeCommentVotes(commentId, votesInc);
+        if(!comment) {
+            await Promise.reject({ status: 404, msg: "Not Found: Comment not found" });
+        }
+        res.status(200).send({ comment });
+    } catch(err) {
+        next(err)
+    }
+};

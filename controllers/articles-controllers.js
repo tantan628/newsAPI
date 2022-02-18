@@ -2,7 +2,7 @@
 const {
     fetchArticles,
     fetchArticleById,
-    changeVotes
+    changeArticleVotes
 } = require('../models/articles-models');
 
 //------CONTROLLERS------
@@ -34,11 +34,11 @@ exports.getArticleById = async (req, res, next) => {
     }
 };
 
-exports.updateVotes = async (req, res, next) => {
+exports.incArticleVotes = async (req, res, next) => {
     const articleId = req.params.article_id;
     const votesInc = req.body.inc_votes;
     try{
-        const { rows: [article] } = await changeVotes(articleId, votesInc);
+        const { rows: [article] } = await changeArticleVotes(articleId, votesInc);
         if(!article) {
             await Promise.reject({ status: 404, msg: "No articles found" })
         }

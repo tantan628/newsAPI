@@ -42,7 +42,7 @@ exports.fetchArticleById = (articleId) => {
     return db.query(queryStr, [articleId])
 };
 
-exports.changeVotes = (articleId, votesInc) => {
+exports.changeArticleVotes = (articleId, votesInc) => {
     //CREATE QUERY STRING
     const queryStr = `
     UPDATE articles

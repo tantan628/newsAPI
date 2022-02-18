@@ -4,7 +4,7 @@ const articlesRouter = require('express').Router();
 const {
     getArticles,
     getArticleById,
-    updateVotes
+    incArticleVotes
 } = require('../controllers/articles-controllers');
 
 const {
@@ -18,7 +18,7 @@ articlesRouter.get('/', getArticles);
 
 articlesRouter.route('/:article_id')
     .get(getArticleById)
-    .patch(updateVotes)
+    .patch(incArticleVotes)
 
 articlesRouter.route('/:article_id/comments')
     .get(getCommentsByArticleId)

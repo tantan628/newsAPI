@@ -12,13 +12,9 @@ afterAll(() => connection.end());
 
 //-------TESTS-------
 describe('Invalid Path', () => {
-    it('status: 404, responds with path not found', () => {
-        return request(app)
-            .get('/not-a/path')
-            .expect(404)
-            .then(({ body }) => {
-                expect(body).toEqual({ msg: "Path not found" })
-            })
+    it('status: 404, responds with path not found', async () => {
+        const { body } = await request(app).get('/not-a-path').expect(404);
+        expect(body).toEqual({ msg: "Path not found" });
     });
 });
 
@@ -30,21 +26,17 @@ describe('GET /api', () => {
 });
 
 describe('GET /api/topics', () => {
-    it('status: 200, responds with all topics', () => {
-        return request(app)
-            .get('/api/topics')
-            .expect(200)
-            .then(({ body }) => {
-                expect(body.topics.length).toBe(3);
-                body.topics.forEach((topic) => {
-                    expect(topic).toEqual(
-                        expect.objectContaining({
-                            description: expect.any(String),
-                            slug: expect.any(String)
-                        })
-                    )
+    it('status: 200, responds with all topics', async () => {
+        const { body } = await request(app).get('/api/topics').expect(200);
+        expect(body.topics.length).toBe(3);
+        body.topics.forEach((topic) => {
+            expect(topic).toEqual(
+                expect.objectContaining({
+                    description: expect.any(String),
+                    slug: expect.any(String)
                 })
-            })
+            )
+        })
     });
 });
 
@@ -154,8 +146,7 @@ describe('GET /api/articles', () => {
 
 describe('GET /api/articles/:article_id', () => {
     it('status: 200, responds with requested article', async () => {
-        const response = await request(app).get('/api/articles/1').expect(200)
-        const { body } = response;
+        const { body } = await request(app).get('/api/articles/1').expect(200)
         expect(body.article).toEqual(
             expect.objectContaining({
                 author: "butter_bridge",
@@ -169,8 +160,7 @@ describe('GET /api/articles/:article_id', () => {
         )
     });
     it('status: 200, responds with comment_count on object', async () => {
-        const response = await request(app).get('/api/articles/1').expect(200)
-        const { body } = response;
+        const { body } = await request(app).get('/api/articles/1').expect(200)
         expect(body.article).toEqual(
             expect.objectContaining({
                 comment_count: 11
@@ -178,13 +168,11 @@ describe('GET /api/articles/:article_id', () => {
         )
     });
     it('status: 404, id not found', async () => {
-        const response = await request(app).get('/api/articles/100').expect(404)
-        const { body } = response;
+        const { body } = await request(app).get('/api/articles/100').expect(404)
         expect(body).toEqual({ msg: 'No articles found' })
     });
     it('status: 400, invalid id given', async () => {
-        const response = await request(app).get('/api/articles/not-a-number').expect(400)
-        const { body } = response;
+        const { body } = await request(app).get('/api/articles/not-a-number').expect(400)
         expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' })
     });
 });
@@ -206,8 +194,7 @@ describe('GET /api/articles/:article_id/comments', () => {
         })
     });
     it('status: 400, invalid id', async () => {
-        const response = await request(app).get('/api/articles/not-a-number/comments').expect(400)
-        const { body } = response;
+        const { body } = await request(app).get('/api/articles/not-a-number/comments').expect(400)
         expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' })
     });
     it('status: 200, responds with empty array if given article id with no comments', async () => {
@@ -215,24 +202,19 @@ describe('GET /api/articles/:article_id/comments', () => {
 		expect(body.comments.length).toBe(0)
     });
     it('status: 404, article_id does not exist', async () => {
-        const response = await request(app).get('/api/articles/200/comments').expect(404)
-        const { body } = response;
+        const { body } = await request(app).get('/api/articles/200/comments').expect(404)
         expect(body).toEqual({ msg: 'Article ID not found' })
     });
 });
 
 describe('PATCH /api/articles/:article_id', () => {
-    it('status: 200, responds with updated article', async () => {
+    it('status: 200, responds with updated article and incremented votes if passed positive number', async () => {
         //ARRANGE
         const testVotes = {
             inc_votes: 50
         };
         //ASSERT
-        const response = await request(app)
-                        .patch('/api/articles/1')
-                        .send(testVotes)
-                        .expect(200)
-        const { body } = response;
+        const { body } = await request(app).patch('/api/articles/1').send(testVotes).expect(200);
         expect(body.article).toEqual(
             expect.objectContaining({
                 author: "butter_bridge",
@@ -245,18 +227,33 @@ describe('PATCH /api/articles/:article_id', () => {
             })
         )
     });
+    it('status: 200, responds with updated article and decremented votes if passed negative number', async () => {
+        //ARRANGE
+        const testVotes = {
+            inc_votes: -50
+        };
+        //ASSERT
+        const { body } = await request(app).patch('/api/articles/1').send(testVotes).expect(200);
+        expect(body.article).toEqual(
+            expect.objectContaining({
+                author: "butter_bridge",
+                title: "Living in the shadow of a great man",
+                article_id: 1,
+                body: "I find this existence challenging",
+                topic: "mitch",
+                created_at: new Date(1594329060000).toJSON(),
+                votes: 50
+            })
+        )
+    });
     it('status: 404, id not found', async () => {
         //ARRANGE
         const testVotes = {
             inc_votes: 50
         };
         //ASSERT
-        const response = await request(app)
-                        .patch('/api/articles/100')
-                        .send(testVotes)
-                        .expect(404)
-        const { body } = response;
-        expect(body).toEqual({ msg: 'No articles found' })
+        const { body } = await request(app).patch('/api/articles/100').send(testVotes).expect(404);
+        expect(body).toEqual({ msg: 'No articles found' });
     });
     it('status: 400, invalid id given', async () => {
         //ARRANGE
@@ -264,12 +261,8 @@ describe('PATCH /api/articles/:article_id', () => {
             inc_votes: 50
         };
         //ASSERT
-        const response = await request(app)
-                        .patch('/api/articles/not-a-number')
-                        .send(testVotes)
-                        .expect(400)
-        const { body } = response;
-        expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' })
+        const { body } = await request(app).patch('/api/articles/not-a-number').send(testVotes).expect(400);
+        expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' });
     });
     it('status: 400, invalid vote increment given', async () => {
         //ARRANGE
@@ -277,12 +270,8 @@ describe('PATCH /api/articles/:article_id', () => {
             inc_votes: 'not-a-number'
         };
         //ASSERT
-        const response = await request(app)
-                        .patch('/api/articles/1')
-                        .send(testVotes)
-                        .expect(400)
-        const { body } = response;
-        expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' })
+        const { body } = await request(app).patch('/api/articles/1').send(testVotes).expect(400);
+        expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' });
     });
 });
 
@@ -365,8 +354,7 @@ describe('POST /api/articles/:article_id/comments', () => {
             body: "This is a test comment!"
         };
         //ASSERT
-        const response = await request(app).post('/api/articles/200/comments').send(testComment).expect(404)
-        const { body } = response;
+        const { body } = await request(app).post('/api/articles/200/comments').send(testComment).expect(404)
         expect(body).toEqual({ msg: 'Not Found: Required data constraint given not found' });
     });
     it('status: 400, invalid id', async () => {
@@ -376,8 +364,71 @@ describe('POST /api/articles/:article_id/comments', () => {
             body: "This is a test comment!"
         };
         //ASSERT
-        const response = await request(app).post('/api/articles/not-a-number/comments').send(testComment).expect(400)
-        const { body } = response;
+        const { body } = await request(app).post('/api/articles/not-a-number/comments').send(testComment).expect(400)
+        expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' })
+    });
+});
+
+describe('PATCH /api/comments/:comment_id', () => {
+    it('status: 200, responds with updated comment with incremented votes if given positive number', async () => {
+        //ARRANGE
+        const testVotesInc = {
+            inc_votes: 10
+        }
+        //ACT & ASSERT
+        const { body } = await request(app).patch('/api/comments/1').send(testVotesInc).expect(200);
+        expect(body.comment).toEqual(
+            expect.objectContaining({
+                body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                votes: 26,
+                author: "butter_bridge",
+                article_id: 9,
+                created_at: new Date(1586179020000).toJSON()
+            })
+        )
+    });
+    it('status: 200, responds with updated comment with decremented votes if given negative number', async () => {
+        //ARRANGE
+        const testVotesInc = {
+            inc_votes: -10
+        }
+        //ACT & ASSERT
+        const { body } = await request(app).patch('/api/comments/1').send(testVotesInc).expect(200);
+        expect(body.comment).toEqual(
+            expect.objectContaining({
+                body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                votes: 6,
+                author: "butter_bridge",
+                article_id: 9,
+                created_at: new Date(1586179020000).toJSON()
+            })
+        )
+    });
+    it('status: 404, comment not found', async () => {
+        //ARRANGE
+        const testVotesInc = {
+            inc_votes: 10
+        }
+        //ACT & ASSERT
+        const { body } = await request(app).patch('/api/comments/1000').send(testVotesInc).expect(404);
+        expect(body).toEqual({ msg: "Not Found: Comment not found" })
+    });
+    it('status: 400, invalid id given', async () => {
+        //ARRANGE
+        const testVotesInc = {
+            inc_votes: 50
+        };
+        //ASSERT
+        const { body } = await request(app).patch('/api/comments/not-a-number').send(testVotesInc).expect(400);
+        expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' })
+    });
+    it('status: 400, invalid vote increment given', async () => {
+        //ARRANGE
+        const testVotesInc = {
+            inc_votes: 'not-a-number'
+        };
+        //ASSERT
+        const { body } = await request(app).patch('/api/comments/1').send(testVotesInc).expect(400);
         expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' })
     });
 });

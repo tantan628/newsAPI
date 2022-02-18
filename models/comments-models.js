@@ -34,4 +34,16 @@ exports.removeComment = (commentId) => {
 
     //RETURN QUERY
     return db.query(queryStr, [commentId]);
-}
+};
+
+exports.changeCommentVotes = (commentId, votesInc) => {
+    //CREATE QUERY STRING
+    const queryStr = `
+    UPDATE comments
+    SET votes = votes + $1
+    WHERE comment_id = $2
+    RETURNING *;`
+
+    //RETURN QUERY
+    return db.query(queryStr, [votesInc, commentId]);
+};
