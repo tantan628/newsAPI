@@ -275,6 +275,113 @@ describe('PATCH /api/articles/:article_id', () => {
     });
 });
 
+describe('POST /api/articles', () => {
+    it('status: 201, responds with new article', async () => {
+        //ARRANGE
+        const testArticle = {
+            author: "butter_bridge",
+            title: "test article1",
+            body: "text of the article",
+            topic: "mitch"
+        };
+        //ASSERT
+        const { body } = await request(app).post('/api/articles').send(testArticle).expect(201);
+        expect(body.article).toEqual(
+            expect.objectContaining({
+                article_id: expect.any(Number),
+                author: "butter_bridge",
+                title: "test article1",
+                topic: "mitch",
+                body: "text of the article",
+                created_at: expect.any(String),
+                votes: 0,
+                comment_count: 0
+            })
+        )
+    });
+    it('status: 201, new article posted to database', async () => {
+        //ARRANGE
+        const testArticle = {
+            author: "butter_bridge",
+            title: "test article1",
+            body: "text of the article",
+            topic: "mitch"
+        };
+        //ACT
+        await request(app).post('/api/articles').send(testArticle).expect(201);
+        const { body } = await request(app).get('/api/articles');
+        expect(body.articles.length).toBe(13)
+    });
+    it('status: 404, author not found', async () => {
+        //ARRANGE
+        const testArticle = {
+            author: "not-a-user",
+            title: "test article1",
+            body: "text of the article",
+            topic: "mitch"
+        };
+        //ASSERT
+        const { body } = await request(app).post('/api/articles').send(testArticle).expect(404);
+        expect(body).toEqual({ msg: "Not Found: Required data constraint given not found" })
+    });
+    it('status: 400, no author given', async () => {
+        //ARRANGE
+        const testArticle = {
+            title: "test article1",
+            body: "text of the article",
+            topic: "mitch"
+        };
+        //ASSERT
+        const { body } = await request(app).post('/api/articles').send(testArticle).expect(400);
+        expect(body).toEqual({ msg: 'Bad Request: Required data missing' });
+    });
+    it('status: 400, no body given', async () => {
+        //ARRANGE
+        const testArticle = {
+            author: "butter_bridge",
+            title: "test article1",
+            topic: "mitch"
+        };
+        //ASSERT
+        const { body } = await request(app).post('/api/articles').send(testArticle).expect(400);
+        expect(body).toEqual({ msg: 'Bad Request: Required data missing' });
+    });
+    it('status: 400, no title given', async () => {
+        //ARRANGE
+        const testArticle = {
+            author: "butter_bridge",
+            body: "text of the article",
+            topic: "mitch"
+        };
+        //ASSERT
+        const { body } = await request(app).post('/api/articles').send(testArticle).expect(400);
+        expect(body).toEqual({ msg: 'Bad Request: Required data missing' });
+    });
+    it('status: 400, no topic given', async () => {
+        //ARRANGE
+        const testArticle = {
+            author: "butter_bridge",
+            body: "text of the article",
+            title: "test article1"
+        };
+        //ASSERT
+        const { body } = await request(app).post('/api/articles').send(testArticle).expect(400);
+        expect(body).toEqual({ msg: 'Bad Request: Required data missing' });
+    });
+    it('status: 404, topic not found', async () => {
+        //ARRANGE
+        const testArticle = {
+            author: "not-a-user",
+            title: "test article1",
+            body: "text of the article",
+            topic: "non-existent topic"
+        };
+        //ASSERT
+        const { body } = await request(app).post('/api/articles').send(testArticle).expect(404);
+        expect(body).toEqual({ msg: "Not Found: Required data constraint given not found" })
+    });
+});
+
 describe('POST /api/articles/:article_id/comments', () => {
     it('status: 201, responds with posted comment', async () => {
         //ARRANGE

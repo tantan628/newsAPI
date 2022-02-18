@@ -85,4 +85,15 @@ exports.decrementCommentCount = (articleId) => {
 
     //RETURN QUERY
     return db.query(queryStr, [articleId]);
-}
+};
+
+exports.createArticle = (author, title, body, topic) => {
+    //CREATE QUERY STRING
+    const queryStr =`
+    INSERT INTO articles (author, title, body, topic)
+    VALUES ($1, $2, $3, $4)
+    RETURNING *;`
+
+    //RETURN QUERY
+    return db.query(queryStr, [author, title, body, topic]);
+};

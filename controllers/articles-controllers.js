@@ -2,7 +2,8 @@
 const {
     fetchArticles,
     fetchArticleById,
-    changeArticleVotes
+    changeArticleVotes,
+    createArticle
 } = require('../models/articles-models');
 
 //------CONTROLLERS------
@@ -43,6 +44,19 @@ exports.incArticleVotes = async (req, res, next) => {
             await Promise.reject({ status: 404, msg: "No articles found" })
         }
         res.status(200).send({ article });
+    } catch(err) {
+        next(err)
+    }
+};
+
+exports.postArticle = async (req, res, next) => {
+    const author = req.body.author;
+    const title = req.body.title;
+    const body = req.body.body;
+    const topic = req.body.topic;
+    try{
+        const { rows: [article] } = await createArticle(author, title, body, topic);
+        res.status(201).send({ article });
     } catch(err) {
         next(err)
     }
