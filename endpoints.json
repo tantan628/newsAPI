@@ -27,6 +27,17 @@
       ]
     }
   },
+  "GET /api/users/:username": {
+    "description": "serves an object containing details for specified user",
+    "queries": [],
+    "exampleResponse": {
+      "user": {
+        "username": "general-wombat",
+        "name": "david",
+        "avatar-url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+      }
+    }
+  },
   "GET /api/articles": {
     "description": "serves an array of all topics",
     "queries": ["topic", "sort_by", "order"],
@@ -79,6 +90,9 @@
   "PATCH /api/articles/:article_id": {
     "description": "updates votes on an article to number specified in body",
     "queries": [],
+    "examplePatchBody": {
+      "votes": "<new vote-count number>"
+    },
     "exampleResponse": {
       "article": {
         "article_id": 1,
@@ -95,6 +109,11 @@
   "POST /api/articles/:article_id/comments": {
     "description": "posts a new comment to the specified article and increments comment count for the article",
     "queries": [],
+    "examplePostBody": {
+      "author": "general-kangaroo",
+      "body": "Text for new comment...",
+      "article_id": "<ID of the article being commented on>"
+    },
     "exampleResponse": {
       "comment":
         {
