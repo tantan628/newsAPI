@@ -30,7 +30,7 @@ exports.removeComment = (commentId) => {
     DELETE
     FROM comments
     WHERE comment_id = $1
-    RETURNING *`
+    RETURNING *;`
 
     //RETURN QUERY
     return db.query(queryStr, [commentId]);

@@ -5,6 +5,7 @@ const app = require('../app');
 const request = require('supertest');
 const connection = require('../db/connection');
 const endpointsObj = require('../endpoints.json');
+const db = require('../db/connection');
 
 //---SEEDING & CONNECTIONS---
 beforeEach(() => seed(testData));
@@ -272,6 +273,25 @@ describe('PATCH /api/articles/:article_id', () => {
         //ASSERT
         const { body } = await request(app).patch('/api/articles/1').send(testVotes).expect(400);
         expect(body).toEqual({ msg: 'Bad Request: Incorrect data type input' });
+    });
+});
+
+describe('DELETE /api/articles/:article_id', () => {
+    it('status: 204, deletes article', async () => {
+        await request(app).delete('/api/articles/1').expect(204);
+        const { body } = await request(app).get('/api/articles/1').expect(404);
+        expect(body).toEqual({ msg: 'No articles found' });
+    });
+    it('status: 204, removes relevant comments', async () => {
+        //ARRANGE
+        const queryStr = `
+        SELECT *
+        FROM comments
+        WHERE article_id = $1;`;
+        
+        await request(app).delete('/api/articles/1').expect(204);
+        const { body } = await db.query(queryStr, [1]);
+        expect(body).toBe(undefined);
     });
 });
 

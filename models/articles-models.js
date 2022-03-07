@@ -97,3 +97,15 @@ exports.createArticle = (author, title, body, topic) => {
     //RETURN QUERY
     return db.query(queryStr, [author, title, body, topic]);
 };
+
+exports.removeArticleById = (articleId) => {
+    //CREATE QUERY STRING
+    const queryStr =`
+    DELETE
+    FROM articles
+    WHERE article_id = $1
+    RETURNING *;`
+
+    //RETURN QUERY
+    return db.query(queryStr, [articleId]);
+};

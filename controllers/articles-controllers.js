@@ -3,7 +3,8 @@ const {
     fetchArticles,
     fetchArticleById,
     changeArticleVotes,
-    createArticle
+    createArticle,
+    removeArticleById
 } = require('../models/articles-models');
 
 //------CONTROLLERS------
@@ -61,3 +62,16 @@ exports.postArticle = async (req, res, next) => {
         next(err)
     }
 };
+
+exports.deleteArticleById = async (req, res, next) => {
+    const articleId = req.params.article_id;
+    try {
+        const { rows } = await removeArticleById(articleId);
+        if(rows.length === 0) {
+            await Promise.reject({status: 404, msg: "Not Found: Article not found" })
+        }
+        res.status(204).send();
+    } catch(err) {
+        next(err)
+    }
+}
