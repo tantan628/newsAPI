@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 const apiRouter = require('./routes/api-router');
+const cors = require('cors');
 
 const {
     handleBadPath,
@@ -11,6 +12,7 @@ const {
     handleServerError
 } = require('./controllers/errors-controller');
 
+app.use(cors());
 
 //-------ROUTER-------
 app.use('/api', apiRouter);
