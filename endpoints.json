@@ -132,9 +132,8 @@
     "description": "posts a new comment to the specified article and increments comment count for the article",
     "queries": [],
     "examplePostBody": {
-      "author": "general-kangaroo",
-      "body": "Text for new comment...",
-      "article_id": "<ID of the article being commented on>"
+      "username": "general-kangaroo",
+      "body": "Text for new comment..."
     },
     "exampleResponse": {
       "comment":

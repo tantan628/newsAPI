@@ -34,5 +34,29 @@ module.exports = [
     name: 'Jess Jelly',
     avatar_url:
       'https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141'
+  },
+  {
+    username: 'tanis',
+    name: 'Tanis',
+    avatar_url:
+      'https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141'
+  },
+  {
+    username: 'voteup',
+    name: 'voteup',
+    avatar_url:
+    'https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141'
+  },
+  {
+    username: 'votedown',
+    name: 'votedown',
+    avatar_url:
+    'https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141'
+  },
+  {
+    username: 'testing',
+    name: 'testing',
+    avatar_url:
+    'https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141'
   }
 ];
