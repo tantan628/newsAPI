@@ -19,7 +19,6 @@ You can clone the project from the GitHub page at: https://github.com/tantan628/
 Once cloned, you will need to initiate npm and install dependencies, this can be done using the follwong commands from the root directory:
 
 ```
-npm init -y
 
 npm install
 ```
